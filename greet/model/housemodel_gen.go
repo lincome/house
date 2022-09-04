@@ -13,7 +13,6 @@ import (
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 	"github.com/zeromicro/go-zero/core/stringx"
-	"go.opentelemetry.io/otel/internal/global"
 )
 
 var (
@@ -93,7 +92,6 @@ func (m *defaultHouseModel) GetAllByArea(ctx context.Context, area string,limit 
 	var resp []*House
 	query := fmt.Sprintf("select %s from %s where `area` = ? order by date desc limit ?",houseRows,m.table)
 	err := m.QueryRowsNoCacheCtx(ctx, &resp, query,area,limit)
-	m.
 	println(err)
 	switch err {
 	case nil:
