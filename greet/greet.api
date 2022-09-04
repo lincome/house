@@ -1,0 +1,52 @@
+type Request {
+	Name string `json:"name"`
+}
+
+type Response {
+	Message      string `json:"message"`
+	AccessToken  string `json:"accessToken"`
+	AccessExpire int64  `json:"accessExpire"`
+	RefreshAfter int64  `json:"refreshAfter"`
+}
+
+service greet-api {
+	@handler GreetHandler
+	get /from (Request) returns (Response);
+}
+
+type (
+	HouseReq {
+		Area  string `form:"area"`
+		Limit int64  `form:"limit,default=30"`
+		Group string `form:"group,default=day"`
+	}
+	HouseReply {
+		XData      []string     `json:"xData"`
+		YData      []int64      `json:"yData"`
+		AreaRange  []AreaRange  `json:"areaRange"`
+		LimitRange []LimitRange `json:"limitRange"`
+		GroupData  []GroupData  `json:"groupData"`
+	}
+	AreaRange {
+		Value string `json:"value"`
+		Label string `json:"label"`
+	}
+	LimitRange {
+		Value int64 `json:"value"`
+		Label int64 `json:"label"`
+	}
+	GroupData {
+		Value string `json:"value"`
+		Label string `json:"label"`
+	}
+)
+
+// @server(
+// 	jwt: Auth
+// 	middleware: Example // 路由中间件声明
+// )
+
+service greet-api {
+	@handler house
+	get /house/get (HouseReq) returns (HouseReply);
+}
