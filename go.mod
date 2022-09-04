@@ -4,11 +4,10 @@ go 1.15
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/golang-module/carbon v1.6.9
-	github.com/golang/protobuf v1.5.2
-	github.com/jinzhu/copier v0.3.5
+	github.com/mattn/go-colorable v0.1.12 // indirect
 	github.com/zeromicro/go-zero v1.4.0
-	github.com/zeromicro/go-zero/tools/goctl v1.4.0
-	google.golang.org/grpc v1.48.0
-	google.golang.org/protobuf v1.28.1
+	go.opentelemetry.io/otel v1.9.0
+	golang.org/x/mod v0.5.0 // indirect
 )
