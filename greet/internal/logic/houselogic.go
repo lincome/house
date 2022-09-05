@@ -32,10 +32,27 @@ func (l *HouseLogic) House(req *types.HouseReq) (resp *types.HouseReply, err err
 	if len(strings.TrimSpace(req.Area)) == 0 {
 		return nil, errorx.NewDefaultError("参数错误")
 	}
+	groupString := ""
+	groupNum := 10
+	group := req.Group
+	switch group {
+	case "week":
+		groupString = "left(date,10)"
+		groupNum = 10
+	case "month":
+		groupString = "left(date,7)"
+		groupNum = 7
+	case "year":
+		groupString = "left(date,4)"
+		groupNum = 4
+	default:
+		groupString = "left(date,10)"
+		groupNum = 10
+	}
 
 	db := global.GVA_DB.Model(&model.HouseDb{})
 	var houseData []model.House
-	db.Select("left(date,7) as date, sum(room_number) as room_number").Where("area = ?", req.Area).Limit(100).Group("left(date,7)").Order("date desc").Find(&houseData)
+	db.Select("left(date,?) as date, sum(room_number) as room_number", groupNum).Where("area = ?", req.Area).Limit(int(req.Limit)).Group(groupString).Order("date desc").Find(&houseData)
 
 	// houseData, err := l.svcCtx.HouseModel.GetAllByArea(l.ctx, req.Area, req.Limit)
 	// switch err {
@@ -63,7 +80,7 @@ func (l *HouseLogic) House(req *types.HouseReq) (resp *types.HouseReply, err err
 
 	areaRangeData := []string{"闽侯", "连江", "罗源", "闽清", "永泰", "长乐", "福清", "鼓楼区", "台江区", "晋安区", "马尾区", "仓山区"}
 	limitRangeData := []int64{10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 365}
-	groupData := []string{"day", "week", "month", "year"}
+	groupData := []string{"day", "month", "year"}
 	for _, area := range areaRangeData {
 		areaRange = append(areaRange, types.AreaRange{
 			Label: area,
