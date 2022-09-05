@@ -10,7 +10,6 @@ import (
 	"go-zero-demo/greet/internal/types"
 	"go-zero-demo/greet/model"
 
-	"github.com/golang-module/carbon"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -36,7 +35,7 @@ func (l *HouseLogic) House(req *types.HouseReq) (resp *types.HouseReply, err err
 
 	db := global.GVA_DB.Model(&model.HouseDb{})
 	var houseData []model.House
-	db.Select("date, sum(room_number) as room_number").Where("area = ?", req.Area).Limit(100).Group("left(date,7)").Order("date desc").Find(&houseData)
+	db.Select("left(date,7) as date, sum(room_number) as room_number").Where("area = ?", req.Area).Limit(100).Group("left(date,7)").Order("date desc").Find(&houseData)
 
 	// houseData, err := l.svcCtx.HouseModel.GetAllByArea(l.ctx, req.Area, req.Limit)
 	// switch err {
@@ -52,7 +51,7 @@ func (l *HouseLogic) House(req *types.HouseReq) (resp *types.HouseReply, err err
 	var yData []int64
 	if len(houseData) > 0 {
 		for _, homestayOrder := range houseData {
-			xData = append(xData, carbon.Parse(homestayOrder.Date).ToDateString())
+			xData = append(xData, homestayOrder.Date)
 			yData = append(yData, homestayOrder.RoomNumber)
 		}
 	} else {
