@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"go-zero-demo/common/errorx"
+	"go-zero-demo/greet/global"
 	"go-zero-demo/greet/internal/svc"
 	"go-zero-demo/greet/internal/types"
 	"go-zero-demo/greet/model"
@@ -33,14 +34,18 @@ func (l *HouseLogic) House(req *types.HouseReq) (resp *types.HouseReply, err err
 		return nil, errorx.NewDefaultError("参数错误")
 	}
 
-	houseData, err := l.svcCtx.HouseModel.GetAllByArea(l.ctx, req.Area, req.Limit)
-	switch err {
-	case nil:
-	case model.ErrNotFound:
-		return nil, errorx.NewDefaultError("用户名不存在")
-	default:
-		return nil, err
-	}
+	db := global.GVA_DB.Model(&model.HouseDb{})
+	var houseData []model.House
+	db.Select("date, sum(room_number) as room_number").Where("area = ?", req.Area).Limit(100).Group("left(date,7)").Order("date desc").Find(&houseData)
+
+	// houseData, err := l.svcCtx.HouseModel.GetAllByArea(l.ctx, req.Area, req.Limit)
+	// switch err {
+	// case nil:
+	// case model.ErrNotFound:
+	// 	return nil, errorx.NewDefaultError("用户名不存在")
+	// default:
+	// 	return nil, err
+	// }
 	// println(len(houseData.List)) x轴
 	var xData []string
 	// println(len(houseData.List)) y轴

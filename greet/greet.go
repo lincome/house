@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"go-zero-demo/common/errorx"
+	"go-zero-demo/greet/global"
 	"go-zero-demo/greet/internal/config"
 	"go-zero-demo/greet/internal/handler"
 	"go-zero-demo/greet/internal/svc"
@@ -39,6 +40,8 @@ func main() {
 			return http.StatusInternalServerError, nil
 		}
 	})
+
+	global.GVA_DB = global.Gorm(c) // gorm连接数据库
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()
