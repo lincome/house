@@ -26,9 +26,9 @@ func GormMysql(c config.Config) *gorm.DB {
 	// 	return nil
 	// }
 	mysqlConfig := mysql.Config{
-		DSN:                       "c.Mysql1.DataSource", // DSN data source name
-		DefaultStringSize:         191,                   // string 类型字段的默认长度
-		SkipInitializeWithVersion: false,                 // 根据版本自动配置
+		DSN:                       c.Mysql1.DataSource, // DSN data source name
+		DefaultStringSize:         191,                 // string 类型字段的默认长度
+		SkipInitializeWithVersion: false,               // 根据版本自动配置
 	}
 	if db, err := gorm.Open(mysql.New(mysqlConfig)); err != nil {
 		return nil
