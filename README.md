@@ -1,6 +1,6 @@
 ## 关于本项目
 
-go-zero+vue3.0开发的网签备案,前后端分离,练手使用
+go-zero+vue3.0开发的网签备案,前后端分离
 ****
 ## 项目脑图
 
@@ -15,7 +15,7 @@ go-zero+vue3.0开发的网签备案,前后端分离,练手使用
 1 后端
 - go 1.15
 - go-zero v1.4.0
-- jwt-go 暂为使用
+- jwt-go （暂未使用）
 - carbon
 - gorm
 - gin (抓数据，暂未开放源码)
@@ -27,4 +27,4 @@ go-zero+vue3.0开发的网签备案,前后端分离,练手使用
 - echarts
 - axios
 - vue-router
-- pinia
+- pinia（暂未使用）
