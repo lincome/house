@@ -1,33 +1,60 @@
-on: push
-name: 🚀 Deploy website on push
+name: Go
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
 jobs:
-  backend:
-    if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'release'
-    name: Backend go
+  test-linux:
+    name: Linux
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        go-version: [1.18]
     steps:
-      - name: Set up Go ${{ matrix.go-version }}
-        uses: actions/setup-go@v1
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v3
+
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v3
         with:
-          go-version: ${{ matrix.go-version }}
+          go-version: ^1.16
+          check-latest: true
+          cache: true
         id: go
 
-      - name: Check out branch
-        uses: actions/checkout@v2
-
-      - name: Download dependencies
+      - name: Get dependencies
         run: |
           go get -v -t -d ./...
-          if [ -f Gopkg.toml ]; then
-              curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-              dep ensure
-          fi
-        working-directory: ./
 
-      - name: Test and Build
+      - name: Lint
         run: |
-          go build greet.go -f etc/greet-api.yaml
-        working-directory: ./greet
+          go vet -stdmethods=false $(go list ./...)
+          go install mvdan.cc/gofumpt@latest
+          test -z "$(gofumpt -l -extra .)" || echo "Please run 'gofumpt -l -w -extra .'"
+
+      - name: Test
+        run: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+
+      - name: Codecov
+        uses: codecov/codecov-action@v3
+
+  test-win:
+    name: Windows
+    runs-on: windows-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v3
+
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v3
+        with:
+          go-version: ^1.16
+          check-latest: true
+          cache: true
+
+      - name: Test
+        run: |
+          go mod verify
+          go mod download
+          go test -v -race ./...
+          cd tools/goctl && go build -v goctl.go
