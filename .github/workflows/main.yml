@@ -30,4 +30,5 @@ jobs:
       - name: Test and Build
         run: |
           go build -v -race
+          ls -l
         working-directory: ./greet
