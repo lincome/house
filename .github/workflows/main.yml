@@ -37,10 +37,10 @@ jobs:
 
       - name: restart
         env:
-          KEY: ${{ secrets.KEY }}
-          HOST: ${{ secrets.HOST }}
-          USER: ${{ secrets.USER }}
-          PROT: ${{ secrets.PROT }}
+          KEY: ${{ env.KEY }}
+          HOST: ${{ env.HOST }}
+          USER: ${{ env.USER }}
+          PROT: ${{ env.PROT }}
           MKDIRTEST: ${{ secrets.MKDIRTEST }}
         run: |
           mkdir -p ~/.ssh/ && echo "$KEY" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
