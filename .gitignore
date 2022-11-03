@@ -82,3 +82,4 @@ pnpm-debug.log*
 !.gitkeep
 .svn
 front/.env.development
+greet/greet
