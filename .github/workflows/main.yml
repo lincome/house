@@ -1,12 +1,33 @@
 on: push
 name: 🚀 Deploy website on push
 jobs:
-  web-deploy:
-    name: 🎉 Deploy
+  backend:
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'release'
+    name: Backend go
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: [1.18]
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
+      - name: Set up Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v1
         with:
-          go-version: '^1.13.1' # The Go version to download (if necessary) and use.
-      - run: go version
+          go-version: ${{ matrix.go-version }}
+        id: go
+
+      - name: Check out branch
+        uses: actions/checkout@v2
+
+      - name: Download dependencies
+        run: |
+          go get -v -t -d ./...
+          if [ -f Gopkg.toml ]; then
+              curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+              dep ensure
+          fi
+        working-directory: ./
+
+      - name: Test and Build
+        run: |
+          go build greet.go -f etc/greet-api.yaml
+        working-directory: ./greet
