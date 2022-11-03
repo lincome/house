@@ -34,3 +34,15 @@ jobs:
           go build -v -race
           ls -l
         working-directory: ./greet
+
+      - name: restart
+        env:
+          KEY: ${{ secrets.KEY }}
+          HOST: ${{ secrets.HOST }}
+          USER: ${{ secrets.USER }}
+          PROT: ${{ secrets.PROT }}
+          MKDIRTEST: ${{ secrets.MKDIRTEST }}
+        run: |
+          mkdir -p ~/.ssh/ && echo "$KEY" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          scp -P ${PROT} -o StrictHostKeyChecking=no -r greet/greet ${USER}@${HOST}:${MKDIRTEST}dist/
