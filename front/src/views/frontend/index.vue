@@ -6,24 +6,24 @@
 
         </div>
         <div class="search">
-            <p style="margin-left: 10px">区域:</p>
+            <!-- <p style="margin-left: 10px">区域:</p>
             <el-select v-model="state.area" class="m-2" placeholder="Select" size="large" @change="loadData()">
                 <el-option v-for="item in state.areaOptions" :key="item.value" :label="item.label"
                     :value="item.value" />
-            </el-select>
-            <span style="margin-left: 10px">时间:</span>
+            </el-select> -->
+            <p style="margin-left: 10px">最近时间:</p>
             <el-select v-model="state.limit" class="m-2" placeholder="Select" size="large" @change="loadData()">
                 <el-option v-for="item in state.limitOptions" :key="item.value" :label="item.label"
                     :value="item.value" />
             </el-select>
-            <span style="margin-left: 10px">按:</span>
+            <!-- <span style="margin-left: 10px">按:</span> -->
             <el-select v-model="state.group" class="m-2" placeholder="Select" size="large" @change="loadData()">
                 <el-option v-for="item in state.groupOptions" :key="item.value" :label="item.label"
                     :value="item.value" />
             </el-select>
         </div>
         <div>
-            <h2>{{ state.area }}</h2>
+            <!-- <h2>{{ state.area }}</h2> -->
             <el-card class="user-views-card" shadow="hover">
                 <div class="account-growth" ref="accountGrowthChartRef"></div>
             </el-card>
@@ -51,6 +51,7 @@ const state: {
     data: any,
     xData: any[],
     yData: any[],
+    sData: any[],
     charts: any[],
     areaOptions: any[],
     limitOptions: any[],
@@ -63,6 +64,7 @@ const state: {
     charts: [],
     xData: [],
     yData: [],
+    sData: [],
     areaOptions: [],
     limitOptions: [],
     groupOptions: [],
@@ -78,6 +80,12 @@ const echartsResize = () => {
 const initUserGrowthChart = () => {
     const userGrowthChart = echarts.init(accountGrowthChartRef.value!)
     const option = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: state.areaOptions
+        },
         xAxis: {
             type: 'category',
             data: state.xData,
@@ -85,19 +93,8 @@ const initUserGrowthChart = () => {
         yAxis: {
             type: 'value'
         },
-        series: [
-            {
-                data: state.yData,
-                type: 'line',
-                label: {
-                    show: true,
-                    position: 'bottom',
-                    textStyle: {
-                        fontSize: 10
-                    }
-                }
-            }
-        ]
+
+        series: state.sData
     }
     userGrowthChart.setOption(option)
     state.charts.push(userGrowthChart)
@@ -109,12 +106,15 @@ const loadData = () => {
     houseGet(state.area, state.limit,state.group).then((res) => {
         if (res.data) {
             console.log(res.data.xData)
-            console.log(res.data.yData)
+            // console.log(res.data.yData)
+            // console.log(res.data.areaRangeData)
+            console.log(res.data.seriesData)
             state.xData = res.data.xData
-            state.yData = res.data.yData
-            state.areaOptions = res.data.areaRange
+            // state.yData = res.data.yData
+            state.areaOptions = res.data.areaRangeData
             state.limitOptions = res.data.limitRange
             state.groupOptions = res.data.groupData
+            state.sData = res.data.seriesData
             initUserGrowthChart()
         }
     }).catch((err: any) => {
@@ -242,7 +242,7 @@ onActivated(() => {
 
 .account-growth {
     width: 100%;
-    height: 300px;
+    height: 600px;
 }
 
 .search {

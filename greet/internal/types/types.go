@@ -19,11 +19,13 @@ type HouseReq struct {
 }
 
 type HouseReply struct {
-	XData      []string     `json:"xData"`
-	YData      []int64      `json:"yData"`
-	AreaRange  []AreaRange  `json:"areaRange"`
-	LimitRange []LimitRange `json:"limitRange"`
-	GroupData  []GroupData  `json:"groupData"`
+	XData         []string     `json:"xData"`
+	YData         []int64      `json:"yData"`
+	AreaRange     []AreaRange  `json:"areaRange"`
+	AreaRangeData []string     `json:"areaRangeData"`
+	LimitRange    []LimitRange `json:"limitRange"`
+	GroupData     []GroupData  `json:"groupData"`
+	SeriesData    []SeriesData `json:"seriesData"`
 }
 
 type AreaRange struct {
@@ -39,4 +41,10 @@ type LimitRange struct {
 type GroupData struct {
 	Value string `json:"value"`
 	Label string `json:"label"`
+}
+
+type SeriesData struct {
+	Name string  `json:"name"`
+	Data []int64 `json:"data"`
+	Type string  `json:"type"`
 }

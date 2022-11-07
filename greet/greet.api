@@ -21,11 +21,13 @@ type (
 		Group string `form:"group,default=day"`
 	}
 	HouseReply {
-		XData      []string     `json:"xData"`
-		YData      []int64      `json:"yData"`
-		AreaRange  []AreaRange  `json:"areaRange"`
-		LimitRange []LimitRange `json:"limitRange"`
-		GroupData  []GroupData  `json:"groupData"`
+		XData         []string     `json:"xData"`
+		YData         []int64      `json:"yData"`
+		AreaRange     []AreaRange  `json:"areaRange"`
+		AreaRangeData []string     `json:"areaRangeData"`
+		LimitRange    []LimitRange `json:"limitRange"`
+		GroupData     []GroupData  `json:"groupData"`
+		SeriesData    []SeriesData `json:"seriesData"`
 	}
 	AreaRange {
 		Value string `json:"value"`
@@ -38,6 +40,11 @@ type (
 	GroupData {
 		Value string `json:"value"`
 		Label string `json:"label"`
+	}
+	SeriesData {
+		Name string  `json:"name"`
+		Data []int64 `json:"data"`
+		Type string  `json:"type"`
 	}
 )
 
