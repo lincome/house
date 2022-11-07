@@ -51,8 +51,15 @@ func (l *HouseLogic) House(req *types.HouseReq) (resp *types.HouseReply, err err
 	}
 
 	db := global.GVA_DB.Model(&model.HouseDb{})
+
+	var total int64 = 0
+	global.GVA_DB.Table("(?) as u", db.Model(&model.HouseDb{}).Select("id").Where("area = ?", req.Area).Group(groupString)).Count(&total)
+
+	pageSize := int(req.Limit)
+	offset := int(total) - pageSize
+
 	var houseData []model.House
-	db.Select("left(date,?) as date, sum(room_number) as room_number", groupNum).Where("area = ?", req.Area).Limit(int(req.Limit)).Group(groupString).Order("date desc").Find(&houseData)
+	global.GVA_DB.Model(&model.HouseDb{}).Select("left(date,?) as date, sum(room_number) as room_number", groupNum).Where("area = ?", req.Area).Offset(offset).Limit(pageSize).Group(groupString).Order("date").Find(&houseData)
 
 	// houseData, err := l.svcCtx.HouseModel.GetAllByArea(l.ctx, req.Area, req.Limit)
 	// switch err {
