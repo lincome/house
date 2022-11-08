@@ -43,6 +43,7 @@ func main() {
 
 	global.GVA_DB = global.Gorm(c) // gorm连接数据库
 
+	fmt.Println("111")
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()
 }
