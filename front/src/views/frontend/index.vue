@@ -11,7 +11,7 @@
                 <el-option v-for="item in state.areaOptions" :key="item.value" :label="item.label"
                     :value="item.value" />
             </el-select> -->
-            <p style="margin-left: 10px">最近时间:</p>
+            <p style="margin-left: 10px">最近:</p>
             <el-select v-model="state.limit" class="m-2" placeholder="Select" size="large" @change="loadData()">
                 <el-option v-for="item in state.limitOptions" :key="item.value" :label="item.label"
                     :value="item.value" />
@@ -144,6 +144,7 @@ onActivated(() => {
 .container {
     width: 100vw;
     height: 100vh;
+    overflow-y: scroll;
     background: url(/@/assets/bg.jpg) repeat;
     color: var(--el-color-white);
 
@@ -247,7 +248,7 @@ onActivated(() => {
 
 .search {
     width: 100%;
-    height: 100px;
+    height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
