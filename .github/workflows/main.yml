@@ -52,6 +52,7 @@ jobs:
           USER: ${{ secrets.USER }}
           PROT: ${{ secrets.PROT }}
           MKDIRTEST: ${{ secrets.MKDIRTEST }}
+          FRONTDIR: ${{ secrets.FRONTDIR }}
         run: |
           mkdir -p ~/.ssh/ && echo "$KEY" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
