@@ -56,5 +56,5 @@ jobs:
           mkdir -p ~/.ssh/ && echo "$KEY" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           scp -P ${PROT} -o StrictHostKeyChecking=no -r greet/greet ${USER}@${HOST}:${MKDIRTEST}dist/
-          scp -P ${PROT} -o StrictHostKeyChecking=no -r front/dist/* ${USER}@${HOST}:${FRONTDIR}
+          scp -P ${PROT} -o StrictHostKeyChecking=no -r front/dist/* ${USER}@${HOST}:${FRONTDIR}/
           ssh -p ${PROT} -o StrictHostKeyChecking=no ${USER}@${HOST} "cd ${MKDIRTEST}dist/ && bash restart.sh > /dev/null  2>&1 &"
