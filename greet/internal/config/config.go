@@ -24,4 +24,6 @@ type Config struct {
 		AccessSecret string
 		AccessExpire int64
 	}
+
+	HouseApi string
 }

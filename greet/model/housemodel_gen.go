@@ -7,6 +7,7 @@ import (
 	"database/sql"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/zeromicro/go-zero/core/stores/builder"
 	"github.com/zeromicro/go-zero/core/stores/cache"
@@ -28,7 +29,6 @@ type (
 	houseModel interface {
 		Insert(ctx context.Context, data *House) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*House, error)
-		GetAllByArea(ctx context.Context, area string, limit int64) ([]*House, error)
 		Update(ctx context.Context, newData *House) error
 		Delete(ctx context.Context, id int64) error
 	}
@@ -39,17 +39,17 @@ type (
 	}
 
 	House struct {
-		Id          int64          `db:"id"`           // id
-		CreatedBy   sql.NullString `db:"created_by"`   // 创建人
-		CreatedTime sql.NullTime   `db:"created_time"` // 创建时间
-		UpdatedBy   sql.NullString `db:"updated_by"`   // 更新人
-		UpdatedTime sql.NullTime   `db:"updated_time"` // 更新时间
-		DeletedTime sql.NullTime   `db:"deleted_time"` // 删除时间
-		Date        string   `db:"date"`
-		Area        string         `db:"area"` // 区域
-		RoomArea    sql.NullString `db:"room_area"`
-		RoomNumber  int64  `db:"room_number"`
-		Memo        sql.NullString `db:"memo"`
+		Id          int64     `db:"id"`           // id
+		CreatedBy   string    `db:"created_by"`   // 创建人
+		CreatedTime time.Time `db:"created_time"` // 创建时间
+		UpdatedBy   string    `db:"updated_by"`   // 更新人
+		UpdatedTime time.Time `db:"updated_time"` // 更新时间
+		DeletedTime time.Time `db:"deleted_time"` // 删除时间
+		Date        time.Time `db:"date"`
+		Area        string    `db:"area"` // 区域
+		RoomArea    string    `db:"room_area"`
+		RoomNumber  int64     `db:"room_number"`
+		Memo        string    `db:"memo"`
 	}
 )
 
@@ -79,23 +79,6 @@ func (m *defaultHouseModel) FindOne(ctx context.Context, id int64) (*House, erro
 	switch err {
 	case nil:
 		return &resp, nil
-	case sqlc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
-	}
-}
-
-func (m *defaultHouseModel) GetAllByArea(ctx context.Context, area string,limit int64) ([]*House, error) {
-	// ginVueAdminHouseIdKey := fmt.Sprintf("%s%v", area, area)
-
-	var resp []*House
-	query := fmt.Sprintf("select %s from %s where `area` = ? order by date desc limit ?",houseRows,m.table)
-	err := m.QueryRowsNoCacheCtx(ctx, &resp, query,area,limit)
-	println(err)
-	switch err {
-	case nil:
-		return resp, nil
 	case sqlc.ErrNotFound:
 		return nil, ErrNotFound
 	default:

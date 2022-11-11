@@ -3,6 +3,7 @@ package house
 import (
 	"context"
 	"strings"
+	"time"
 
 	"go-zero-demo/common/errorx"
 	"go-zero-demo/greet/global"
@@ -38,10 +39,6 @@ func (l *HouseLogic) House(req *types.HouseReq) (resp *types.HouseReply, err err
 	group := req.Group
 	whereData := ""
 	switch group {
-	case "week":
-		groupString = "left(date,10)"
-		groupNum = 10
-		whereData = carbon.Parse(carbon.Now().ToDateString()).SubDays(int(req.Limit)).ToDateTimeString()
 	case "month":
 		groupString = "left(date,7)"
 		groupNum = 7
@@ -61,22 +58,22 @@ func (l *HouseLogic) House(req *types.HouseReq) (resp *types.HouseReply, err err
 	var total int64 = 0
 	global.GVA_DB.Table("(?) as u", db.Model(&model.HouseDb{}).Select("id").Group(groupString).Group("area")).Count(&total)
 
-	// pageSize := int(req.Limit) * 12
-	// offset := int(total) - pageSize
+	var houseData []struct {
+		Id          int64     `db:"id"`           // id
+		CreatedBy   string    `db:"created_by"`   // 创建人
+		CreatedTime time.Time `db:"created_time"` // 创建时间
+		UpdatedBy   string    `db:"updated_by"`   // 更新人
+		UpdatedTime time.Time `db:"updated_time"` // 更新时间
+		DeletedTime time.Time `db:"deleted_time"` // 删除时间
+		Date        string    `db:"date"`
+		Area        string    `db:"area"` // 区域
+		RoomArea    string    `db:"room_area"`
+		RoomNumber  int64     `db:"room_number"`
+		Memo        string    `db:"memo"`
+	}
 
-	var houseData []model.House
+	global.GVA_DB.Model(&model.HouseDb{}).Select("left(date,?) as date,area,sum(room_number) as room_number", groupNum).Where("date > ? and area != ?", whereData, "合计").Group(groupString).Group("area").Order("date").Find(&houseData)
 
-	global.GVA_DB.Model(&model.HouseDb{}).Select("left(date,?) as date,area,sum(room_number) as room_number", groupNum).Where("date > ?", whereData).Group(groupString).Group("area").Order("date").Find(&houseData)
-
-	// houseData, err := l.svcCtx.HouseModel.GetAllByArea(l.ctx, req.Area, req.Limit)
-	// switch err {
-	// case nil:
-	// case model.ErrNotFound:
-	// 	return nil, errorx.NewDefaultError("用户名不存在")
-	// default:
-	// 	return nil, err
-	// }
-	// println(len(houseData.List)) x轴
 	var xData []string
 	// println(len(houseData.List)) y轴
 
@@ -87,7 +84,6 @@ func (l *HouseLogic) House(req *types.HouseReq) (resp *types.HouseReply, err err
 		//x轴
 		for _, homestayOrder := range houseData {
 			xData = append(xData, homestayOrder.Date)
-			// areaYData["id"] = append(areaYData["id"], homestayOrder.RoomNumber)
 		}
 
 		//组合区域map
