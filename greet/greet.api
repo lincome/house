@@ -1,3 +1,11 @@
+info(
+	title: "接口定义"
+	author: "linqr"
+	date: "2022-11-1"
+	desc: "接口主描述文件"
+	version: "1.0"
+)
+
 type Request {
 	Name string `json:"name"`
 }
@@ -46,6 +54,13 @@ type (
 		Data []int64 `json:"data"`
 		Type string  `json:"type"`
 	}
+
+	CatchHouseReq {
+		Date string `form:"date"`
+	}
+
+	CatchHouseRes {
+	}
 )
 
 // @server(
@@ -53,7 +68,16 @@ type (
 // 	middleware: Example // 路由中间件声明
 // )
 
+@server(
+	prefix: /house
+	// middleware: CheckUser
+	group: house
+)
+
 service greet-api {
 	@handler house
-	get /house/get (HouseReq) returns (HouseReply);
+	get /get (HouseReq) returns (HouseReply);
+	
+	@handler catchHouse
+	get /catchHouse (CatchHouseReq) returns (CatchHouseRes);
 }

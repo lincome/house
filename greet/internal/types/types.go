@@ -48,3 +48,10 @@ type SeriesData struct {
 	Data []int64 `json:"data"`
 	Type string  `json:"type"`
 }
+
+type CatchHouseReq struct {
+	Date string `form:"date"`
+}
+
+type CatchHouseRes struct {
+}
