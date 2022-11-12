@@ -39,7 +39,7 @@ func (l *CatchHouseLogic) CatchHouse(req *types.CatchHouseReq) (resp *types.Catc
 	// 	return nil, err
 	// }
 
-	date := carbon.Yesterday().ToTimeString()
+	date := carbon.Yesterday().ToDateString()
 	if req.Date != "" {
 		date = req.Date
 	}

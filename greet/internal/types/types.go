@@ -50,7 +50,7 @@ type SeriesData struct {
 }
 
 type CatchHouseReq struct {
-	Date string `form:"date"`
+	Date string `form:"date,optional"`
 }
 
 type CatchHouseRes struct {

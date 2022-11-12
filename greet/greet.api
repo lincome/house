@@ -56,7 +56,7 @@ type (
 	}
 
 	CatchHouseReq {
-		Date string `form:"date"`
+		Date string `form:"date,optional"`
 	}
 
 	CatchHouseRes {
