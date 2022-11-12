@@ -1,0 +1,335 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "接口定义",
+    "description": "接口主描述文件",
+    "version": "1.0"
+  },
+  "host": "127.0.0.1:8188",
+  "basePath": "/",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/from": {
+      "get": {
+        "operationId": "GreetHandler",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "greet-api"
+        ]
+      }
+    },
+    "/house/catchHouse": {
+      "get": {
+        "summary": "抓数据",
+        "operationId": "catchHouse",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CatchHouseRes"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "house"
+        ]
+      }
+    },
+    "/house/get": {
+      "get": {
+        "summary": "获取数据",
+        "operationId": "house",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/HouseReply"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "area",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64",
+            "default": "30"
+          },
+          {
+            "name": "group",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "default": "day"
+          }
+        ],
+        "requestBody": {},
+        "tags": [
+          "house"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "AreaRange": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        }
+      },
+      "title": "AreaRange",
+      "required": [
+        "value",
+        "label"
+      ]
+    },
+    "CatchHouseReq": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string"
+        }
+      },
+      "title": "CatchHouseReq"
+    },
+    "CatchHouseRes": {
+      "type": "object",
+      "title": "CatchHouseRes"
+    },
+    "GroupData": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        }
+      },
+      "title": "GroupData",
+      "required": [
+        "value",
+        "label"
+      ]
+    },
+    "HouseReply": {
+      "type": "object",
+      "properties": {
+        "xData": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "yData": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "areaRange": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AreaRange"
+          }
+        },
+        "areaRangeData": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "limitRange": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LimitRange"
+          }
+        },
+        "groupData": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GroupData"
+          }
+        },
+        "seriesData": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SeriesData"
+          }
+        }
+      },
+      "title": "HouseReply",
+      "required": [
+        "xData",
+        "yData",
+        "areaRange",
+        "areaRangeData",
+        "limitRange",
+        "groupData",
+        "seriesData"
+      ]
+    },
+    "HouseReq": {
+      "type": "object",
+      "properties": {
+        "area": {
+          "type": "string"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int64",
+          "default": "30"
+        },
+        "group": {
+          "type": "string",
+          "default": "day"
+        }
+      },
+      "title": "HouseReq",
+      "required": [
+        "area",
+        "limit",
+        "group"
+      ]
+    },
+    "LimitRange": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "label": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "LimitRange",
+      "required": [
+        "value",
+        "label"
+      ]
+    },
+    "Request": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "Request",
+      "required": [
+        "name"
+      ]
+    },
+    "Response": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "accessToken": {
+          "type": "string"
+        },
+        "accessExpire": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "refreshAfter": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "Response",
+      "required": [
+        "message",
+        "accessToken",
+        "accessExpire",
+        "refreshAfter"
+      ]
+    },
+    "SeriesData": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "title": "SeriesData",
+      "required": [
+        "name",
+        "data",
+        "type"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "apiKey": []
+    }
+  ]
+}

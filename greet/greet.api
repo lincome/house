@@ -75,9 +75,15 @@ type (
 )
 
 service greet-api {
+	@doc(
+		summary: "获取数据"
+	)
 	@handler house
 	get /get (HouseReq) returns (HouseReply);
 	
+	@doc(
+		summary: "抓数据"
+	)
 	@handler catchHouse
 	get /catchHouse (CatchHouseReq) returns (CatchHouseRes);
 }
