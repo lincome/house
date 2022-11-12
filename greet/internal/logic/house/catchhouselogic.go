@@ -45,18 +45,21 @@ func (l *CatchHouseLogic) CatchHouse(req *types.CatchHouseReq) (resp *types.Catc
 	}
 
 	println(date)
+	err = l.svcCtx.HouseModel.GetRecordByDate(l.ctx, date)
 
+	// if err = l.svcCtx.HouseModel.GetRecordByDate(l.ctx, date); err != nil && !errors.Is(err, model.ErrNotFound) {
+	// 	return nil, err
+	// }
+	//存在记录不写入
+	// fmt.Println(err)
+	if err == nil {
+		return nil, err
+	}
 	result, err := l.GetHouseData(date)
 	if err != nil {
 		fmt.Println("error:", err)
 		return
 	}
-	// fmt.Println("result:", result.Data.Pages)
-
-	// l.svcCtx.HouseModel.GetRecordByDateAndArea(l.ctx)
-	// if err != nil {
-	// 	return nil, err
-	// }
 
 	j := 0
 	for _, v := range result.DealNew {
