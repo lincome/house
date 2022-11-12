@@ -1,6 +1,7 @@
 ## 关于本项目
 
 go-zero+vue3.0开发的网签备案,前后端分离
+地址:https://lindesigner.eu.org/front-house/#/
 ****
 ## 项目脑图
 
@@ -18,7 +19,7 @@ go-zero+vue3.0开发的网签备案,前后端分离
 - jwt-go （暂未使用）
 - carbon
 - gorm
-- gin (抓数据，暂未开放源码)
+<!-- - gin (抓数据，暂未开放源码) -->
 
 2 前端
 - typescript
